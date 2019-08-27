@@ -173,6 +173,7 @@
 <script type="text/javascript">
 
 $("#submit").on("click", function(event){
+    var scoresArray = [];
 
     var newScores = [];
 
@@ -199,14 +200,6 @@ $("#submit").on("click", function(event){
 
     console.log(addFriend);
 
-    $.post("/api/friends", addFriend, function(data){
-        if(data){
-            console.log("You have been added to our Friends List!");
-        }
-        else{
-            console.log("error");
-        };
-    });
 
     $.get("/api/friends", function(data){
         var friendData = data;
@@ -236,18 +229,12 @@ $("#submit").on("click", function(event){
                 var a10 = newScores[9];
                 var b10 = friendScores[9];
 
-                var diff1 = function (a1, b1) { return Math.abs(a1 - b1); };
-                var diff2 = function (a2, b2) { return Math.abs(a2 - b2); };
-                var diff3 = function (a3, b3) { return Math.abs(a3 - b3); };
-                var diff4 = function (a4, b4) { return Math.abs(a4 - b4); };
-                var diff5 = function (a5, b5) { return Math.abs(a5 - b5); };
-                var diff6 = function (a6, b6) { return Math.abs(a6 - b6); };
-                var diff7 = function (a7, b7) { return Math.abs(a7 - b7); };
-                var diff8 = function (a8, b8) { return Math.abs(a8 - b8); };
-                var diff9 = function (a9, b9) { return Math.abs(a9 - b9); };
-                var diff10 = function (a10, b10) { return Math.abs(a10 - b10); };
+                var diff = function (a, b) { return Math.abs(a - b); };
+                
 
-                var totalDifference = diff1 + diff2 + diff3 + diff4 + diff5 + diff6 + diff7 + diff8 + diff9 + diff10;
+                var totalDifference = diff(a1, b1) + diff(a2, b2) + diff(a3, b3) + diff(a4, b4) + diff(a5, b5) + diff(a6, b6) + diff(a7, b7) + diff(a8, b8) + diff(a9, b9) + diff(a10, b10);
+
+                scoresArray.push(totalDifference);
 
                 var compObj = {
                     compName: friendData[i].name,
@@ -255,8 +242,40 @@ $("#submit").on("click", function(event){
                 };
 
                 diffArray.push(compObj);
+        };
+
+        for(var i = 0; i < scoresArray.length; i++){
+            for(var j = 0; j < scoresArray.length; j++){
+                if (scoresArray[j - 1] > scoresArray[j]){
+                    temp = scoresArray[j - 1];
+                    scoresArray[j - 1] = scoresArray[j];
+                    scoresArray[j] = temp;
+                }
+            }
         }
+        console.log(diffArray);
+        console.log(scoresArray);
+        for(var i = 0; i < diffArray.length; i++){
+            var frienddiff = diffArray[i].difference;
+            if(scoresArray[0] === frienddiff){
+                alert(diffArray[i].compName + " is your closest match!");
+            };
+        };
+        
+
+
+
+
+
     })
+    $.post("/api/friends", addFriend, function(data){
+        if(data){
+            console.log("You have been added to our Friends List!");
+        }
+        else{
+            console.log("error");
+        };
+    });
 })
 
 </script>
