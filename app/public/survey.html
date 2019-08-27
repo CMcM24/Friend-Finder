@@ -176,22 +176,87 @@ $("#submit").on("click", function(event){
 
     var newScores = [];
 
-    newName =$("#nameInput").val().trim();
-    newPhoto =$("#photoInput").val().trim();
-    one =$("#q1").val();
-    two =$("#q2").val();
-    three =$("#q3").val();
-    four =$("#q4").val();
-    five =$("#q5").val();
-    six =$("#q6").val();
-    seven =$("#q7").val();
-    eight =$("#q8").val();
-    nine =$("#q9").val();
-    ten =$("#q10").val();
+    var newName =$("#nameInput").val().trim();
+    var newPhoto =$("#photoInput").val().trim();
+    var one =$("#q1").val();
+    var two =$("#q2").val();
+    var three =$("#q3").val();
+    var four =$("#q4").val();
+    var five =$("#q5").val();
+    var six =$("#q6").val();
+    var seven =$("#q7").val();
+    var eight =$("#q8").val();
+    var nine =$("#q9").val();
+    var ten =$("#q10").val();
 
     newScores.push(one, two, three, four, five, six, seven, eight, nine, ten);
 
-    console.log(newScores);
+    var addFriend = {
+        name: newName,
+        photo: newPhoto,
+        scores: newScores
+    };
+
+    console.log(addFriend);
+
+    $.post("/api/friends", addFriend, function(data){
+        if(data){
+            console.log("You have been added to our Friends List!");
+        }
+        else{
+            console.log("error");
+        };
+    });
+
+    $.get("/api/friends", function(data){
+        var friendData = data;
+        var diffArray = [];
+
+        for(var i = 0; i < friendData.length; i++){
+            var friendScores = friendData[i].scores;
+
+                var a1 = newScores[0];
+                var b1 = friendScores[0];
+                var a2 = newScores[1];
+                var b2 = friendScores[1];
+                var a3 = newScores[2];
+                var b3 = friendScores[2];
+                var a4 = newScores[3];
+                var b4 = friendScores[3];
+                var a5 = newScores[4];
+                var b5 = friendScores[4];
+                var a6 = newScores[5];
+                var b6 = friendScores[5];
+                var a7 = newScores[6];
+                var b7 = friendScores[6];
+                var a8 = newScores[7];
+                var b8 = friendScores[7];
+                var a9 = newScores[8];
+                var b9 = friendScores[8];
+                var a10 = newScores[9];
+                var b10 = friendScores[9];
+
+                var diff1 = function (a1, b1) { return Math.abs(a1 - b1); };
+                var diff2 = function (a2, b2) { return Math.abs(a2 - b2); };
+                var diff3 = function (a3, b3) { return Math.abs(a3 - b3); };
+                var diff4 = function (a4, b4) { return Math.abs(a4 - b4); };
+                var diff5 = function (a5, b5) { return Math.abs(a5 - b5); };
+                var diff6 = function (a6, b6) { return Math.abs(a6 - b6); };
+                var diff7 = function (a7, b7) { return Math.abs(a7 - b7); };
+                var diff8 = function (a8, b8) { return Math.abs(a8 - b8); };
+                var diff9 = function (a9, b9) { return Math.abs(a9 - b9); };
+                var diff10 = function (a10, b10) { return Math.abs(a10 - b10); };
+
+                var totalDifference = diff1 + diff2 + diff3 + diff4 + diff5 + diff6 + diff7 + diff8 + diff9 + diff10;
+
+                var compObj = {
+                    compName: friendData[i].name,
+                    difference: totalDifference
+                };
+
+                diffArray.push(compObj);
+        }
+    })
 })
 
 </script>
